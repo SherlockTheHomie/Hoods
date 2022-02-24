@@ -1,13 +1,26 @@
 import ReactDOM from 'react-dom';
 import * as React from 'react';
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+import { AuthProvider } from './utils/AuthContext';
+import { db } from './firebase/firebase';
+import { collection, getDocs } from 'firebase/firestore';
+
+import Hood from './components/Hood';
+import SignupSplash from './components/pages/Signup';
+import LoginSplash from './components/pages/Login';
+import PrivateRoute from './components/PrivateRoute';
+import ForgotPassword from './components/pages/ForgotPassword';
+import UpdateProfile from './components/pages/UpdateProfile';
+
+import '@use-gesture/react';
 import './App.css';
-import Hood from "./components/Hood";
 import Paper from '@mui/material/Paper';
-import background from "./static/images/background.jpg";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
 import useWindowDimensions from './components/GetWindow';
-import { requirePropFactory } from '@mui/material';
+
 
 
 const theme = createTheme({
@@ -50,8 +63,6 @@ const theme = createTheme({
   root: {
     "& .MuiPaper-root": {
       padding: 0,
-      height: '100vh',
-      width: '100vw',
       backgroundrepeat: 'no-repeat',
       backgroundposition: 'center',
     }
@@ -64,27 +75,47 @@ const styles = {
   }
 };
 
-function App() {
+function App(props) {
 
   const { height, width } = useWindowDimensions();
 
+  // const [ users, setUsers] = useState([]);
+  // const usersCollectionRef = collection(db, "users");
+
+  // useEffect(() => {
+  //   const getUsers = async () => {
+  //     const data = await getDocs(usersCollectionRef);
+  //     setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
+  //   }
+
+  //   getUsers()
+  // }, [])
+
 
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />     
-          
+
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <AuthProvider>
+          <Switch>
             <Paper className='root' style={styles.paperContainer} sx={{
               bgcolor: 'rgba(255,255,255,0.00)',
-              width: {width},
-              height: {height},
+              maxWidth: { width },
+              maxHeight: { height },
               padding: 0,
               margin: 0,
             }}>
-            <Hood />
-          </Paper>
-      </ThemeProvider>
-    </>
+              <PrivateRoute exact path="/" component={Hood} />
+              <PrivateRoute path="/update-profile" component={UpdateProfile} />
+              <Route path="/signup" component={SignupSplash} />
+              <Route path="/login" component={LoginSplash} />
+              <Route path="/forgot-password" component={ForgotPassword} />
+            </Paper>
+          </Switch>
+        </AuthProvider>
+      </Router>
+    </ThemeProvider>
   );
 }
 

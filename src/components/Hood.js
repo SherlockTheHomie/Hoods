@@ -5,6 +5,9 @@ import Container from '@mui/material/Container';
 import Street from './pages/Street.js';
 import Paper from '@mui/material/Paper';
 import useWindowDimensions from './GetWindow.js';
+import MapsUgcTwoToneIcon from '@mui/icons-material/MapsUgcTwoTone';
+
+
 
 export default function MainContainer() {
     const [currentPage, setCurrentPage] = useState('Home');
@@ -23,7 +26,7 @@ export default function MainContainer() {
 
     return (
         <>
-            <Menu currentPage={currentPage} handlePageChange={handlePageChange} sx={{ maxWidth: width, height:height }} >
+            <Menu currentPage={currentPage} handlePageChange={handlePageChange} sx={{ maxWidth: 'inherit', height:'inherit' }} >
             </Menu>
             <Container>
             {renderPage()}
