@@ -1,11 +1,10 @@
-import ReactDOM from 'react-dom';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { AuthProvider } from './utils/AuthContext';
-import { db } from './firebase/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+// import { db } from './firebase/firebase';
+// import { collection, getDocs } from 'firebase/firestore';
 
 import Hood from './components/Hood';
 import SignupSplash from './components/pages/Signup';
@@ -15,7 +14,6 @@ import ForgotPassword from './components/pages/ForgotPassword';
 import UpdateProfile from './components/pages/UpdateProfile';
 
 import '@use-gesture/react';
-import './App.css';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
@@ -28,12 +26,12 @@ const theme = createTheme({
     type: 'light',
     primary: {
       main: '#346eff',
-      contrastText: '#346eff',
+      contrastText: '#eeeeee',
     },
     secondary: {
       main: '#346eff',
-      contrastText: '#000000',
-      dark: '#000000',
+      contrastText: '#346eff',
+      dark: '#346eff',
     },
     background: {
       paper: 'rgba(0,0,0,0.50)',
@@ -69,13 +67,9 @@ const theme = createTheme({
   }
 });
 
-const styles = {
-  paperContainer: {
-    position: 'center',
-  }
-};
 
-function App(props) {
+
+function App() {
 
   const { height, width } = useWindowDimensions();
 
@@ -96,25 +90,16 @@ function App(props) {
 
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
         <AuthProvider>
-          <Switch>
-            <Paper className='root' style={styles.paperContainer} sx={{
-              bgcolor: 'rgba(255,255,255,0.00)',
-              maxWidth: { width },
-              maxHeight: { height },
-              padding: 0,
-              margin: 0,
-            }}>
-              <PrivateRoute exact path="/" component={Hood} />
-              <PrivateRoute path="/update-profile" component={UpdateProfile} />
-              <Route path="/signup" component={SignupSplash} />
-              <Route path="/login" component={LoginSplash} />
-              <Route path="/forgot-password" component={ForgotPassword} />
-            </Paper>
-          </Switch>
+          <Routes>
+            <Route path="/" element={<PrivateRoute><Hood/></PrivateRoute>} />
+            <Route path="/update-profile" element={<UpdateProfile />} />
+            <Route path="/signup" element={<SignupSplash />} />
+            <Route path="/login" element={<LoginSplash />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+
+          </Routes>
         </AuthProvider>
-      </Router>
     </ThemeProvider>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -16,16 +16,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
-import { useAuth } from '../utils/AuthContext';
 
-import { updateCurrentUser } from 'firebase/auth';
+
+
 
 
 
 export default function Menu() {
-  const [error, setError] = useState("")
-  const { currentUser, logout } = useAuth();
-  const history = useHistory();
+
 
   const [state, setState] = React.useState({
     top: false,
@@ -34,16 +32,8 @@ export default function Menu() {
     right: false,
   });
 
-  async function handleLogout() { 
-    setError('')
+  
 
-    try {
-      await logout()
-      history.push('/loginSplash')
-    } catch {
-      setError('failed to logout')
-    }
-  }
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -78,7 +68,7 @@ export default function Menu() {
           <ListItemIcon sx={{ color: '#acff00', }}>
             <AccountCircleTwoToneIcon />
           </ListItemIcon>
-          <ListItemText>{currentUser.username}</ListItemText>
+          <ListItemText>username</ListItemText>
         </ListItem>
         <ListItem button elevation={20} sx={{ fontSize: 'small', }} >
           <ListItemIcon sx={{ color: '#acff00', }}>
@@ -113,14 +103,14 @@ export default function Menu() {
             color: 'rgba(255,255,255,1.0)',
           }} >Update Profile</ListItemText>
         </ListItem>
-        <ListItem button onClick={handleLogout} elevation={20} sx={{ fontSize: 'small', }} >
+        {/* <ListItem button onClick={handleLogout} elevation={20} sx={{ fontSize: 'small', }} >
           <ListItemIcon sx={{ color: '#acff00', }}>
             <GroupsTwoToneIcon />
           </ListItemIcon>
           <ListItemText sx={{
             color: 'rgba(255,255,255,1.0)',
           }} >Log Out</ListItemText>
-        </ListItem>
+        </ListItem> */}
       </List>
 
     </Box>

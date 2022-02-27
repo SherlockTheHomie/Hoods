@@ -1,164 +1,149 @@
-import React, { useState } from 'react';
-import { styled } from '@mui/material/styles';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router';
+
 import { useTransition, animated } from 'react-spring';
+
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Grid';
-import useWindowDimensions from '../GetWindow';
-import UserAvatar from '../Avatarcard';
 import Typography from '@mui/material/Typography';
 
-import { db } from './firebase/firebase';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
-import { useAuth } from '../../utils/AuthContext';
+import useWindowDimensions from '../GetWindow';
+
+// import { db } from './firebase/firebase';
+import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { db } from '../../firebase';
+import { auth } from '../../firebase';
 
 export default function SignupSplash() {
+    const usernameRef = useRef();
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const passConfirmRef = useRef();
 
-    const [formState, setFormState] = useState({ username: '', email: '', password: '' });
-    const { signup } = useAuth();
+    const auth = getAuth()
+    let navigate = useNavigate();
+
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const history = useHistory();
 
-    const usersCollectionRef = collection(db, "users");
-
+    const { height, width } = useWindowDimensions();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (formState.password !== formState.confirmpassword) {
-            return setError ('Those passwords arent the same...')
+        const username = usernameRef.current.value
+        const email = emailRef.current.value
+        const password = passwordRef.current.value
+        const passwordConfirm = passConfirmRef.current.value
+        const userAvatar = {}
+        const rooms = []
+
+        
+
+        if (password !== passwordConfirm) {
+            return setError('Those passwords arent the same...')
         }
         try {
             setError('')
             setLoading(true)
-            await signup(formState.username, formState.email, formState.password)
-            history.push("/")
-        } catch {
+            console.log("FRANKLIN NOOOOOOOOOOOOOOOOOOOOOOOOO")
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            
+            const user = userCredential.user
+
+            updateProfile(auth.currentUser, {
+                displayName: username,
+            })
+            
+            const formData = { username, email, password, userAvatar, rooms }
+
+            delete formData.password
+            formData.timestamp = serverTimestamp()
+
+            await setDoc(doc(db, 'Users', user.uid), formData)
+            //     .then((userCredential) => {
+            //         await setDoc(doc(usersCollectionRef, user.uid), {
+            //             username: `${username}`, email: `${email}`
+            //             avatarId: "", rooms: "" 
+            //         }
+            //         // addDoc(usersCollectionRef, {userCredentials});
+            //         console.log("AFTER ADD DOC")
+            // })
+            navigate("/")
+        } catch (error) {
+            console.log(error)
             setError('failed to create account')
         }
-    setLoading(false)
+        setLoading(false)
     }
 
 
 
 
 
-//         await addDoc(userCollectionRef, {
-//             name: formState.username,
-//             email: formState.email,
-//             password: formState.password,
-//         });
-//         const token = mutationResponse.data.addUser.token;
-//         Auth.login(token);
+    //         await addDoc(userCollectionRef, {
+    //             name: formState.username,
+    //             email: formState.email,
+    //             password: formState.password,
 
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
-
-// const handleChange = (event) => {
-//     const { name, value } = event.target;
-//     setFormState({
-//         ...formState,
-//         [name]: value,
-//     });
-// };
-
-
-return (
-    <Grid container classname="login-form" direction="column" justify="center">
-        <Paper
-            variant="elevation"
-            elevation={2}
-            className="login-background"
-        >
-            <Grid item>
-                <Typography component="h1" variant="h5">
-                    Sign up
-                </Typography>
+    return (
+        <Box component="form" height={height} width='inherit'>
+            <Grid container className="signup-form" direction="column" alignItems="center" justify="center">
+                <Grid item xs={12} marginTop={2}>
+                    <Typography component="h1" variant="h5" >
+                        Sign Up
+                    </Typography>
+                    {error && <Alert severity="error">{error}</Alert>}
+                </Grid>
+                <Grid item xs={12} padding={1}>
+                    <FormControl type="username" id="username" variant="standard">
+                        <InputLabel htmlFor="component-outlined"></InputLabel>
+                        <OutlinedInput id="component-outlined" placeholder="islandboi4eva" inputRef={usernameRef} sx={{ bgcolor: 'rgba(255,255,255,0.25)' }} />
+                        <FormHelperText id="my-helper-text" >Username</FormHelperText>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} padding={1}>
+                    <FormControl type="email" id="email" variant="standard">
+                        <InputLabel htmlFor="component-outlined"></InputLabel>
+                        <OutlinedInput id="component-outlined" placeholder="kingof@jellies.com" inputRef={emailRef} sx={{ bgcolor: 'rgba(255,255,255,0.25)' }} />
+                        <FormHelperText id="my-helper-text" >Email</FormHelperText>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} padding={1}>
+                    <FormControl type="password" id="password" variant="standard">
+                        <InputLabel htmlFor="component-outlined"></InputLabel>
+                        <OutlinedInput id="component-outlined" placeholder="anything...sneaky" inputRef={passwordRef} sx={{ bgcolor: 'rgba(255,255,255,0.25)' }} />
+                        <FormHelperText id="my-helper-text" >Password</FormHelperText>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} padding={1}>
+                    <FormControl type="password" id="passwordconfirm" variant="standard">
+                        <InputLabel htmlFor="component-outlined"></InputLabel>
+                        <OutlinedInput id="component-outlined" placeholder="One more time!" inputRef={passConfirmRef} sx={{ bgcolor: 'rgba(255,255,255,0.25)' }} />
+                        <FormHelperText id="my-helper-text" >Confirm Password</FormHelperText>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} padding={1}>
+                    <Button
+                        disabled={loading}
+                        variant="outlined"
+                        color="primary"
+                        type="submit"
+                        className="button-block"
+                        onClick={handleSubmit}
+                    >
+                        Lets do this!
+                    </Button>
+                </Grid>
             </Grid>
-            <Grid item>
-                <form onSubmit={this.handleSubmit}>
-                    {error && <Alert>{error}</Alert> }
-                    <Grid container direction="column" spacing={2}>
-                        <Grid item>
-                            <TextField
-                                type="email"
-                                placeholder="Email"
-                                fullWidth
-                                name="username"
-                                variant="outlined"
-                                value={this.state.username}
-                                onChange={(event) =>
-                                    this.setState({
-                                        [event.target.name]: event.target.value,
-                                    })
-                                }
-                                required
-                                autoFocus
-                            />
-                        </Grid>
-                        <Grid item>
-                            <TextField
-                                type="password"
-                                placeholder="Password"
-                                fullWidth
-                                name="password"
-                                variant="outlined"
-                                value={this.state.password}
-                                onChange={(event) =>
-                                    this.setState({
-                                        [event.target.name]: event.target.value,
-                                    })
-                                }
-                                required
-                            />
-                        </Grid>
-                        <Grid item>
-                            <TextField
-                                type="password"
-                                placeholder="Confirm Password"
-                                fullWidth
-                                name="confirmpassword"
-                                variant="outlined"
-                                value={this.state.confirmpassword}
-                                onChange={(event) =>
-                                    this.setState({
-                                        [event.target.name]: event.target.value,
-                                    })
-                                }
-                                required
-                            />
-                        </Grid>
-                        <Grid item>
-                            <Button
-                                disabled={loading}
-                                variant="contained"
-                                color="primary"
-                                type="submit"
-                                className="button-block"
-                            >
-                                Submit
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </form>
-            </Grid>
-            <Grid item>
-                <Link href="#" variant="body2">
-                    Forgot Password?
-                </Link>
-            </Grid>
-        </Paper>
-    </Grid>
-
-
-
-);
+        </Box>
+    );
 }
 

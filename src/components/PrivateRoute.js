@@ -1,15 +1,15 @@
 import React from "react";
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
 
-export default function PrivateRoute({ component: Component, ...rest }) {
-    const { currentUser } = useAuth()
-    return (
-        <Route
-            {...rest}
-            render={props => {
-            return currentUser ? <Component {...props} /> : <Redirect to="/login"/>
-            }}
-        ></Route>
-    )
+export default function PrivateRoute({ children, role }) {
+    const { currentUser, isAdmin } = useAuth();
+
+    if (currentUser === undefined ) {
+        return (
+            <div>NOT REAL</div>
+        )
+    } else {
+        return children;
+    }
 }

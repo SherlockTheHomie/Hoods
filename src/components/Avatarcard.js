@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 export default function UserAvatar() {
     const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
     const bind = useDrag(({ offset: [x, y] }) => api.start({ x, y }), {
-      bounds: { left: -100, right: 100, top: -50, bottom: 50 }
+      bounds: { left: -100, right: 600, top: -50, bottom: 100 }
     })
 
 

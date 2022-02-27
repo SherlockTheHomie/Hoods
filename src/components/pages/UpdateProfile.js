@@ -1,163 +1,97 @@
-import React, { useState } from 'react';
-import { styled } from '@mui/material/styles';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
 import { useTransition, animated } from 'react-spring';
+
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Grid';
-import useWindowDimensions from '../GetWindow';
-import UserAvatar from '../Avatarcard';
 import Typography from '@mui/material/Typography';
 
-import { db } from './firebase/firebase';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+
+import useWindowDimensions from '../GetWindow';
+
+// import { db } from './firebase/firebase';
+// import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { useAuth } from '../../utils/AuthContext';
 
 export default function UpdateProfile() {
-
-    const [formState, setFormState] = useState({ username: '', email: '', password: '' });
-    const { currentUser } = useAuth();
+    const usernameRef = useRef();
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    
+    const { currentUser, updateprofile } = useAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const history = useHistory();
+    const navigate = useNavigate();
 
-    const usersCollectionRef = collection(db, "users");
+    // const usersCollectionRef = collection(db, "users");
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (formState.password !== formState.confirmpassword) {
-            return setError ('Those passwords arent the same...')
-        }
+        // if (formState.password !== formState.confirmpassword) {
+        //     return setError ('Those passwords arent the same...')
+        // }
         try {
             setError('')
             setLoading(true)
-            await signup(formState.username, formState.email, formState.password)
-            history.push("/")
+            await updateprofile(emailRef.current.value, passwordRef.current.value)
+            navigate.push("/")
         } catch {
-            setError('failed to create account')
+            setError('failed to update account')
         }
     setLoading(false)
     }
 
 
-
-
-
-//         await addDoc(userCollectionRef, {
-//             name: formState.username,
-//             email: formState.email,
-//             password: formState.password,
-//         });
-//         const token = mutationResponse.data.addUser.token;
-//         Auth.login(token);
-
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
-
-// const handleChange = (event) => {
-//     const { name, value } = event.target;
-//     setFormState({
-//         ...formState,
-//         [name]: value,
-//     });
-// };
-
-
 return (
-    <Grid container classname="login-form" direction="column" justify="center">
-        <Paper
-            variant="elevation"
-            elevation={2}
-            className="login-background"
-        >
-            <Grid item>
-                <Typography component="h1" variant="h5">
-                    Update Profile
-                </Typography>
-            </Grid>
-            <Grid item>
-                <form onSubmit={this.handleSubmit}>
-                    {error && <Alert>{error}</Alert> }
-                    <Grid container direction="column" spacing={2}>
-                        <Grid item>
-                            <TextField
-                                type="email"
-                                placeholder="Email"
-                                fullWidth
-                                name="username"
-                                variant="outlined"
-                                value={this.state.username}
-                                onChange={(event) =>
-                                    this.setState({
-                                        [event.target.name]: event.target.value,
-                                    })
-                                }
-                                required
-                                autoFocus
-                            />
-                        </Grid>
-                        <Grid item>
-                            <TextField
-                                type="password"
-                                placeholder="Password"
-                                fullWidth
-                                name="password"
-                                variant="outlined"
-                                value={this.state.password}
-                                onChange={(event) =>
-                                    this.setState({
-                                        [event.target.name]: event.target.value,
-                                    })
-                                }
-                                required
-                            />
-                        </Grid>
-                        <Grid item>
-                            <TextField
-                                type="password"
-                                placeholder="Confirm Password"
-                                fullWidth
-                                name="confirmpassword"
-                                variant="outlined"
-                                value={this.state.confirmpassword}
-                                onChange={(event) =>
-                                    this.setState({
-                                        [event.target.name]: event.target.value,
-                                    })
-                                }
-                                required
-                            />
-                        </Grid>
-                        <Grid item>
-                            <Button
-                                disabled={loading}
-                                variant="contained"
-                                color="primary"
-                                type="submit"
-                                className="button-block"
-                            >
-                                Submit
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </form>
-            </Grid>
-            <Grid item>
-                <Link href="#" variant="body2">
-                    Forgot Password?
-                </Link>
-            </Grid>
-        </Paper>
-    </Grid>
 
-
-
+    <Box component="form" onSubmit={handleSubmit}>
+            <Grid container className="signup-form" direction="column" justify="center">
+                <Grid item>
+                    <Typography component="h1" variant="h5">
+                        Sign Up
+                    </Typography>
+                    {error && <Alert severity="error">{error}</Alert>}
+                </Grid>
+                <Grid item>
+                    <FormControl type="username" id="username" variant="standard">
+                        <InputLabel htmlFor="component-simple">Need to update us, {currentUser.username}</InputLabel>
+                        <Input id="component-simple" inputRef={usernameRef} />
+                    </FormControl>
+                </Grid>
+                <Grid item>
+                    <FormControl type="email" id="email" variant="standard">
+                        <InputLabel htmlFor="component-simple">Email</InputLabel>
+                        <Input id="component-simple" inputRef={emailRef} />
+                    </FormControl>
+                </Grid>
+                <Grid item>
+                    <FormControl type="password" id="password" variant="standard">
+                        <InputLabel htmlFor="component-simple">Password</InputLabel>
+                        <Input id="component-simple" inputRef={passwordRef} />
+                    </FormControl>
+                </Grid>
+                <Grid item>
+                    <Button
+                        disabled={loading}
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        className="button-block"
+                    >
+                        Sign Up
+                    </Button>
+                    <Link to="/forgot-password">Forgot Password?</Link>
+                </Grid>
+            </Grid>
+        </Box>
 );
 }
