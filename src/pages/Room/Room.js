@@ -5,20 +5,20 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import useWindowDimensions from '../GetWindow';
+import useWindowDimensions from '../../GetWindow';
 import '../hood.css';
-import UserAvatar from '../Avatarcard';
+import UserAvatar from '../../Avatarcard';
 import Typography from '@mui/material/Typography';
 
 import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 
 
-import { useAuth } from '../../utils/AuthContext';
+import { useAuth } from '../../../utils/AuthContext';
 
 
 
-export default function Home() {
+export default function Room() {
 
   const [error, setError] = useState("")
   const { signOut } = useAuth();
@@ -50,9 +50,6 @@ export default function Home() {
         padding: 0,
         margin: 0,
       }}>
-         <Grid item xs={3} height="15vh">
-         <Typography>Hello World</Typography>
-         </Grid>
          <Grid item xs={3}>
          <Typography>Hello World</Typography>
          </Grid>
@@ -60,7 +57,10 @@ export default function Home() {
          <Typography>Hello World</Typography>
          </Grid>
          <Grid item xs={3}>
-         <Button onClick={handleLogout}>Log Out</Button>
+         <Typography>Hello World</Typography>
+         </Grid>
+         <Grid item xs={3}>
+         <Button >Log Out</Button>
          </Grid>
          <Grid item xs={3}>
          <UserAvatar/>
@@ -72,7 +72,7 @@ export default function Home() {
          <UserAvatar/>
          </Grid>
          <Grid item xs={3}>
-         <Button onClick={handleLogout}>Log Out</Button>
+         <Button >Log Out</Button>
          </Grid>
        </Grid>
   );

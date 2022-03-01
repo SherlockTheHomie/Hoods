@@ -8,7 +8,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import MapsUgcTwoToneIcon from '@mui/icons-material/MapsUgcTwoTone';
-import image from '../static/images/avatar1.png';
+
+import image from '../../static/images/avatar2.png';
 import IconButton from '@mui/material/IconButton';
 
 export default function UserAvatar() {

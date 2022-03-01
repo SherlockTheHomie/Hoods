@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router';
 
 import { useTransition, animated } from 'react-spring';
 
+import './mainnav.css';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';  
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -13,7 +16,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-import useWindowDimensions from '../GetWindow';
+import useWindowDimensions from '../../components/GetWindow';
 
 // import { db } from './firebase/firebase';
 // import { collection, getDocs, addDoc } from 'firebase/firestore';
@@ -30,6 +33,8 @@ export default function LoginSplash() {
     
     // Window Dimension getter boi
     const { height, width } = useWindowDimensions();
+
+    const [open, setOpen] = useState(false);
 
     
     // const userRef = collection(db, "users");
@@ -51,12 +56,20 @@ export default function LoginSplash() {
                     navigate("/")
                 })
         } catch {
-            setError('failed to login')
+            setError('You have failed!')
+            setOpen(true);
         }
         setLoading(false)
     }
 
 
+    
+
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+  
     // const [users, setUsers] = useState([]);
     // const usersCollectionRef = collection(db, "users");
 
@@ -70,14 +83,17 @@ export default function LoginSplash() {
     // }, [])
 
     return (
-        <Box component="form" onSubmit={handleSubmit} height={height} width='inherit'>
+        <Box component="form" onSubmit={handleSubmit} height={height} width={width}>
             <Grid container className="login-form" direction="column" alignItems="center" justifyItems="center">
 
                 <Grid item xs={12} marginTop={2}>
                     <Typography component="h1" variant="h5" >
                         Login
                     </Typography>
-                    {error && <Alert severity="error">{error}</Alert>}
+                    {error && <Dialog 
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title" sx={{ bgcolor: 'rgba(255,255,255,0.25)' }}><DialogTitle sx={{ color: '#d60e00' }}>{error}</DialogTitle></Dialog>}
                 </Grid>
                 <Grid item xs={12} padding={1}>
                     <FormControl type="email" id="email" >

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 
 import { useTransition, animated } from 'react-spring';
 
+import './mainnav.css';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
@@ -13,7 +14,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-import useWindowDimensions from '../GetWindow';
+import useWindowDimensions from '../../components/GetWindow';
 
 // import { db } from './firebase/firebase';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
@@ -94,43 +95,47 @@ export default function SignupSplash() {
     //             password: formState.password,
 
     return (
-        <Box component="form" height={height} width='inherit'>
-            <Grid container className="signup-form" direction="column" alignItems="center" justify="center">
-                <Grid item xs={12} marginTop={2}>
+        
+            <Grid container className="signup-form" spacing={1} sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                maxWidth: width,
+                maxHeight: height,
+                margin:0,
+
+            }}>
+                <Grid container item xs={12} sx={{ justifyContent: 'center'}}>
                     <Typography component="h1" variant="h5" >
                         Sign Up
                     </Typography>
                     {error && <Alert severity="error">{error}</Alert>}
                 </Grid>
-                <Grid item xs={12} padding={1}>
-                    <FormControl type="username" id="username" variant="standard">
+                <Grid container item xs={12} sx={{ justifyContent: 'center'}}>
+                    <FormControl type="username" id="username" variant="standard" sx={{marginRight: 1}}>
                         <InputLabel htmlFor="component-outlined"></InputLabel>
                         <OutlinedInput id="component-outlined" placeholder="islandboi4eva" inputRef={usernameRef} sx={{ bgcolor: 'rgba(255,255,255,0.25)' }} />
                         <FormHelperText id="my-helper-text" >Username</FormHelperText>
                     </FormControl>
-                </Grid>
-                <Grid item xs={12} padding={1}>
-                    <FormControl type="email" id="email" variant="standard">
+                    <FormControl type="email" id="email" variant="standard" sx={{marginLeft: 1}}>
                         <InputLabel htmlFor="component-outlined"></InputLabel>
                         <OutlinedInput id="component-outlined" placeholder="kingof@jellies.com" inputRef={emailRef} sx={{ bgcolor: 'rgba(255,255,255,0.25)' }} />
                         <FormHelperText id="my-helper-text" >Email</FormHelperText>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12} padding={1}>
-                    <FormControl type="password" id="password" variant="standard">
+                <Grid container item xs={12} sx={{ justifyContent: 'center'}}>
+                    <FormControl type="password" id="password" variant="standard" sx={{marginRight: 1}}>
                         <InputLabel htmlFor="component-outlined"></InputLabel>
                         <OutlinedInput id="component-outlined" placeholder="anything...sneaky" inputRef={passwordRef} sx={{ bgcolor: 'rgba(255,255,255,0.25)' }} />
                         <FormHelperText id="my-helper-text" >Password</FormHelperText>
                     </FormControl>
-                </Grid>
-                <Grid item xs={12} padding={1}>
-                    <FormControl type="password" id="passwordconfirm" variant="standard">
+                    <FormControl type="password" id="passwordconfirm" variant="standard" sx={{marginLeft: 1}}>
                         <InputLabel htmlFor="component-outlined"></InputLabel>
                         <OutlinedInput id="component-outlined" placeholder="One more time!" inputRef={passConfirmRef} sx={{ bgcolor: 'rgba(255,255,255,0.25)' }} />
                         <FormHelperText id="my-helper-text" >Confirm Password</FormHelperText>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12} padding={1}>
+                <Grid container item xs={12} sx={{ justifyContent: 'center'}}>
                     <Button
                         disabled={loading}
                         variant="outlined"
@@ -142,8 +147,10 @@ export default function SignupSplash() {
                         Lets do this!
                     </Button>
                 </Grid>
+                <Grid container item xs={12} sx={{ justifyContent: 'center'}}>
+                    <Button variant="filled" href="/login" sx={{ color: '#acff00' }}>Already have an Account?</Button>
+                </Grid>
             </Grid>
-        </Box>
     );
 }
 

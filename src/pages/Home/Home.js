@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, Component } from 'react';
+import { styled } from '@mui/material/styles';
+import { useTransition, animated } from 'react-spring';
+
+import Dashboard from './Dashboard';
+
 import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
@@ -15,17 +21,21 @@ import HiveTwoToneIcon from '@mui/icons-material/HiveTwoTone';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
+import useWindowDimensions from '../../components/GetWindow';
+import UserAvatar from '../User/Avatarcard';
+import Typography from '@mui/material/Typography';
+
+import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 
-import { auth } from '../firebase';
+
+import { auth } from '../../firebase';
 
 
 
+export default function Home() {
 
-
-export default function Menu() {
-
+  const { height, width } = useWindowDimensions();
 
   const [drawerState, setState] = useState({
     top: false,
@@ -134,25 +144,30 @@ export default function Menu() {
     </Box>
   );
 
+
   return (
+    <>
     <div>
-      {['right'].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <DensityMediumTwoToneIcon onClick={toggleDrawer(anchor, true)}
-            sx={{
-              float: 'right',
-              marginTop: 0,
-              marginRight: 0,
-            }}>{anchor}</DensityMediumTwoToneIcon>
-          <Drawer
-            anchor={anchor}
-            open={drawerState[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-          >
-            {list(anchor)}
-          </Drawer>
-        </React.Fragment>
-      ))}
-    </div>
+    {['right'].map((anchor) => (
+      <React.Fragment key={anchor}>
+        <DensityMediumTwoToneIcon onClick={toggleDrawer(anchor, true)}
+          sx={{
+            float: 'right',
+            marginTop: 2,
+            marginRight: 2,
+          }}>{anchor}</DensityMediumTwoToneIcon>
+        <Drawer
+          anchor={anchor}
+          open={drawerState[anchor]}
+          onClose={toggleDrawer(anchor, false)}
+          sx={{ paddingRight: 0}}
+        >
+          {list(anchor)}
+        </Drawer>
+      </React.Fragment>
+    ))}
+  </div>
+       <Dashboard/>
+       </>
   );
 }

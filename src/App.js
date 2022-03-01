@@ -7,11 +7,11 @@ import { AuthProvider } from './utils/AuthContext';
 // import { collection, getDocs } from 'firebase/firestore';
 
 import Hood from './components/Hood';
-import SignupSplash from './components/pages/Signup';
-import LoginSplash from './components/pages/Login';
+import SignupSplash from './pages/MainNav/Signup';
+import LoginSplash from './pages/MainNav/Login';
+import ForgotPassword from './pages/MainNav/ForgotPassword';
+import UpdateProfile from './pages/MainNav/UpdateProfile';
 import PrivateRoute from './components/PrivateRoute';
-import ForgotPassword from './components/pages/ForgotPassword';
-import UpdateProfile from './components/pages/UpdateProfile';
 
 import '@use-gesture/react';
 import Paper from '@mui/material/Paper';
@@ -57,13 +57,6 @@ const theme = createTheme({
       lg: 1200,
       xl: 1536,
     },
-  },
-  root: {
-    "& .MuiPaper-root": {
-      padding: 0,
-      backgroundrepeat: 'no-repeat',
-      backgroundposition: 'center',
-    }
   }
 });
 

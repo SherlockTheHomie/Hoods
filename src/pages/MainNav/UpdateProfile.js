@@ -14,7 +14,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 
-import useWindowDimensions from '../GetWindow';
+import useWindowDimensions from '../../components/GetWindow';
 
 // import { db } from './firebase/firebase';
 // import { collection, getDocs, addDoc } from 'firebase/firestore';

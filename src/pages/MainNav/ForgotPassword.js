@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useTransition, animated } from 'react-spring';
+import './mainnav.css';
 
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -11,13 +12,13 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import useWindowDimensions from '../GetWindow';
-import UserAvatar from '../Avatarcard';
+import useWindowDimensions from '../../components/GetWindow';
 import Typography from '@mui/material/Typography';
 
 // import { db } from './firebase/firebase';
 // import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { useAuth } from '../../utils/AuthContext';
+import UserAvatar from '../User/Avatarcard';
 
 export default function ForgotPassword() {
 
